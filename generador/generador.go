@@ -47,15 +47,16 @@ func main()  {
 
 func GenerarPokemones() {
 	for {
-		time.Sleep(5 * time.Second)
-		var nuevoPokemon Pokemon
-		nuevoPokemon.id = rand.Intn(10000000)
-		nuevoPokemon.tipo = rand.Intn(7 - 3) + 3 // entre 3 y 6
+		if len(clubEntrenadores) != 0 {
+			time.Sleep(5 * time.Second)
+			var nuevoPokemon Pokemon
+			nuevoPokemon.id = rand.Intn(10000000)
+			nuevoPokemon.tipo = rand.Intn(7 - 3) + 3 // entre 3 y 6
 
-		indiceEntrenadorAlQueSeEnviaElNuevoPokemon := rand.Intn(len(clubEntrenadores))
-		entrenadorDestinatario := clubEntrenadores[indiceEntrenadorAlQueSeEnviaElNuevoPokemon]
-		go EnviarPokemonAEntrenador(entrenadorDestinatario, nuevoPokemon)
-
+			indiceEntrenadorAlQueSeEnviaElNuevoPokemon := rand.Intn(len(clubEntrenadores))
+			entrenadorDestinatario := clubEntrenadores[indiceEntrenadorAlQueSeEnviaElNuevoPokemon]
+			go EnviarPokemonAEntrenador(entrenadorDestinatario, nuevoPokemon)
+		}
 	}
 }
 
