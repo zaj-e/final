@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"math/rand"
 	"net"
+	"os"
+	"strings"
 	"time"
 )
 
@@ -33,6 +35,11 @@ type Entrenador struct {
 }
 
 func main()  {
+
+	fmt.Println("Ingrese direccion de este nodo generador: ")
+	bIn := bufio.NewReader(os.Stdin)
+	miDireccion, _ = bIn.ReadString('\n')
+	miDireccion = strings.TrimSpace(miDireccion)
 
 	go GenerarPokemones()
 	EscucharNuevoMiembroComoGenerador()
