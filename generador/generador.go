@@ -12,6 +12,7 @@ import (
 const (
 	puerto_generador_avisar_nuevos_miembros = 1000
 	puerto_recibir_nuevos_miembros = 8002
+	puerto_recibir_pokemones = 2000
 	)
 
 var (
@@ -45,9 +46,18 @@ func GenerarPokemones() {
 		nuevoPokemon.tipo = rand.Intn(7 - 3) + 3 // entre 3 y 6
 
 		indiceEntrenadorAlQueSeEnviaElNuevoPokemon := rand.Intn(len(clubEntrenadores))
-
+		entrenadorDestinatario := clubEntrenadores[indiceEntrenadorAlQueSeEnviaElNuevoPokemon]
+		go EnviarPokemonAEntrenador(entrenadorDestinatario, nuevoPokemon)
 
 	}
+}
+
+func EnviarPokemonAEntrenador(entrenadorDestinatario Entrenador, pokemon Pokemon) {
+	remoteHost := fmt.Sprintf("%s:%d", entrenadorDestinatario.direccion, puerto_recibir_pokemones)
+	con, _ := net.Dial("tcp", remoteHost)
+	defer con.Close()
+	bMsg, _ := json.Marshal(pokemon)
+	fmt.Fprintln(con, string(bMsg))
 }
 
 

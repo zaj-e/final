@@ -13,6 +13,7 @@ const (
 	puerto_generador_avisar_nuevos_miembros = 1000
 	puerto_avisar_nuevos_miembros = 8001
 	puerto_recibir_nuevos_miembros = 8002
+	puerto_recibir_pokemones = 2000
 )
 
 type Pokemon struct {
