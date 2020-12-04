@@ -36,7 +36,8 @@ var (
 	)
 
 func solicitarRegistro(dir string)  {
-	con, _ := net.Dial("tcp", dir)
+	hostname := fmt.Sprintf("%s:%d", dir, puerto_recibir_nuevos_miembros)
+	con, _ := net.Dial("tcp", hostname)
 	defer con.Close()
 	bMs, _ := json.Marshal(yo)
 	fmt.Fprintf(con, string(bMs))
