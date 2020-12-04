@@ -86,7 +86,7 @@ func AvisarNuevoMiembro(entrenador Entrenador, nuevoEntrenador Entrenador) {
 
 
 func EscucharNuevoMiembroComoGenerador() {
-	hostName := fmt.Sprintf("%s:%d", miDireccion, puerto_recibir_nuevos_miembros)
+	hostName := fmt.Sprintf("%s:%d", miDireccion, puerto_generador_avisar_nuevos_miembros)
 
 	ln, _ := net.Listen("tcp", hostName)
 	defer ln.Close()

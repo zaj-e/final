@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -110,6 +111,28 @@ func EscucharNuevoMiembro() {
 }
 
 
+func ManejarCaptura(con net.Conn) {
+	var pokemonRecibido Pokemon
+	bufferIn := bufio.NewReader(con)
+	msg, _ := bufferIn.ReadString('\n')
+	json.Unmarshal([]byte(msg), &pokemonRecibido)
+
+	if (pokemonRecibido.tipo == yo.tipoElegido) {
+		yo.pokemons = append(yo.pokemons, pokemonRecibido)
+	}
+}
+
+func RecibirPokemones() {
+	hostName := fmt.Sprintf("%s:%d", direccionGenerador, puerto_recibir_pokemones)
+	ln, _ := net.Listen("tcp", hostName)
+	defer ln.Close()
+	for {
+		con, _ := ln.Accept()
+		go ManejarCaptura(con)
+	}
+}
+
+
 func main () {
 
 	fmt.Println("Ingrese direccion del nodo generador: ")
@@ -117,12 +140,30 @@ func main () {
 	direccionGenerador, _ = bIn.ReadString('\n')
 	direccionGenerador = strings.TrimSpace(direccionGenerador)
 
+	fmt.Println("Usuario, ingrese la direccion para este entrenador: ")
+	bInDos := bufio.NewReader(os.Stdin)
+	miDireccion, _ := bInDos.ReadString('\n')
+	miDireccion = strings.TrimSpace(miDireccion)
+	yo.direccion = miDireccion
+
+
+	fmt.Println("Escoja el tipo de pokemon a capturar (3, 4, 5 o 6): ")
+	bInTres := bufio.NewReader(os.Stdin)
+	tipoPokemonElegido , _ := bInTres.ReadString('\n')
+	tipoPokemonElegido = strings.TrimSpace(tipoPokemonElegido)
+	yo.tipoElegido, _ = strconv.Atoi(tipoPokemonElegido)
+
+
+
+
 	solicitarRegistro(direccionGenerador)
 
 	PrimeroEnEscucharNuevoMiembro()
 	EscucharNuevoMiembro()
+	RecibirPokemones()
 	
 }
+
 
 
 
